@@ -5,11 +5,27 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContent } from './screen/DrawerContent';
 import MaintTabScreen, {StackScreen, DetailsStackScreen, } from './screen/MainTabScreen';
+import { ActivityIndicator, View } from 'react-native';
 
 const Drawer = createDrawerNavigator();
 
 
 function App() {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [userToken, setUserToken] = React.useState(null);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+  if (isLoading) {
+    return (
+      <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+        <ActivityIndicator size='large'/>
+      </View>
+    );
+  }
   return (
     <NavigationContainer>
       <Drawer.Navigator drawerContent={props => <DrawerContent {... props}/>} screenOptions={{
