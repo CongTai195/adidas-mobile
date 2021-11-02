@@ -1,25 +1,24 @@
 import * as React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ScrollView, View, Text, Button, StyleSheet, Image, FlatList } from 'react-native';
+import ProductItem from '../components/ProductItem';
+import products from '../data/products';
 
-function HomeScreen({navigation}) {
+
+
+const HomeScreen= ({navigation}) => {
   return (
-    <View style={styles.container}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to male screen"
-        onPress={() => navigation.navigate("Male")}
+    <View style={styles.page}>
+      <FlatList
+        data={products}
+        renderItem={({item}) => <ProductItem item={item}/>}
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center', 
-        justifyContent: 'center'
+    page: {
+        padding: 10,
     }
 });
 

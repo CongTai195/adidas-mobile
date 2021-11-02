@@ -6,7 +6,9 @@ import FemaleScreen from "./FemaleScreen";
 import { Icon } from 'react-native-vector-icons/Ionicons';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import LoginScreen from "./LoginScreen";
+import LoginScreen from "./LoginScreen/LoginScreen";
+import RegisterScreen from "./RegisterScreen";
+import DetailScreen from "./DetailScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -62,7 +64,7 @@ export const StackScreen = ({ navigation }) => (
     <Stack.Navigator screenOptions={{
         headerShown: false
       }} >
-        <Stack.Screen name="Home" component={HomeScreen} options={{
+        <Stack.Screen name="Home" component={DetailScreen} options={{
             title: 'Trang chủ',
             // headerLeft: () => (
             //   <Icon.Button name='menu' size={25} 
@@ -75,6 +77,8 @@ export const StackScreen = ({ navigation }) => (
         <Stack.Screen name="Male" component={MaleScreen} />
         <Stack.Screen name="Female" component={FemaleScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
+
     </Stack.Navigator>
 );
 
