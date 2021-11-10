@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { ScrollView, View, Text, Button, StyleSheet, Image, FlatList } from 'react-native';
-import ProductItem from '../components/ProductItem';
-import products from '../data/products';
+import ProductItem from '../../components/ProductItem';
+import products from '../../data/products';
 
 
 
-const HomeScreen= ({navigation}) => {
+const CartScreen= ({navigation}) => {
   return (
     <View style={styles.page}>
       <FlatList
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default HomeScreen;
+export default CartScreen;
