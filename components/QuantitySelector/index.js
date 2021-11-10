@@ -8,7 +8,7 @@ const QuantitySeclector = ({quantity, setQuantity}) => {
     }
 
     const onPlus = () => {
-        setQuantity(quantity+ 1);
+        setQuantity(quantity + 1);
     }
     return (
         <View style={styles.root}>

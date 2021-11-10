@@ -9,6 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import LoginScreen from "./LoginScreen/LoginScreen";
 import RegisterScreen from "./RegisterScreen";
 import DetailScreen from "./DetailScreen";
+import CartScreen from "./CartScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -64,7 +65,7 @@ export const StackScreen = ({ navigation }) => (
     <Stack.Navigator screenOptions={{
         headerShown: false
       }} >
-        <Stack.Screen name="Home" component={DetailScreen} options={{
+        <Stack.Screen name="Home" component={HomeScreen} options={{
             title: 'Trang chủ',
             // headerLeft: () => (
             //   <Icon.Button name='menu' size={25} 
@@ -78,6 +79,7 @@ export const StackScreen = ({ navigation }) => (
         <Stack.Screen name="Female" component={FemaleScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="Detail" component={DetailScreen}/>
 
     </Stack.Navigator>
 );
