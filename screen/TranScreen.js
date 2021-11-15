@@ -3,13 +3,13 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-function FemaleScreen({navigation}) {
+function TranScreen({navigation}) {
     return (
       <View style={styles.container}>
-        <Text>Female Screen</Text>
+        <Text>Theo dõi thông tin đơn hàng</Text>
         <Button
-          title="Go to male screen"
-          onPress={() => navigation.push("Male")}
+          title="Go to female screen"
+          onPress={() => navigation.push("Female")}
         />
         <Button
           title="Go to home screen"
@@ -35,4 +35,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default FemaleScreen;
+export default TranScreen;

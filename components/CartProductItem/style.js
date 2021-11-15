@@ -2,12 +2,15 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     root: {
-      flexDirection: 'row',
       borderWidth: 1,
       borderColor: '#d1d1d1',
       borderRadius: 10,
       backgroundColor: '#FFF',
-      marginVertical: 5
+      marginVertical: 5,
+      padding: 5,
+    },
+    row: {
+      flexDirection: 'row',
     },
     rightContainer: {
       padding: 10,
@@ -15,17 +18,20 @@ const styles = StyleSheet.create({
     },
     image: {
       flex: 2,
-      height: 130,
+      height: 170,
       resizeMode: 'contain',
     },
     title:{
       fontSize: 18,
-      color: "black"
+
     },
     price: {
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: 'bold',
-      marginTop: 10
+      marginTop: 5
+    },
+    quantityContainer:{
+      marginVertical: 10
     }
 });
 

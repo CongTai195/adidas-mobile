@@ -16,6 +16,8 @@ interface ProductItemProps{
 
 const ProductItem = ({item}: ProductItemProps) => {
   const navigation = useNavigation();
+
+  const price = item.price;
   
   const onPress = () => {
     navigation.navigate("Detail", {item: item});
@@ -29,7 +31,7 @@ const ProductItem = ({item}: ProductItemProps) => {
                 <Text style={styles.title} numberOfLines={3}>
                     {item.name}
                 </Text>
-                <Text style={styles.price}>{item.price} VND</Text>
+                <Text style={styles.price}>{price.toLocaleString('vi-VN')} VND</Text>
             </View>
         </View>
       </Pressable>

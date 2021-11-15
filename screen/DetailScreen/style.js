@@ -6,11 +6,13 @@ const styles = StyleSheet.create({
     },
     title: {
       fontSize: 20,
-      color: 'black'
+      color: 'black',
+      fontWeight: 'bold'
     },
     price: {
       fontSize: 18,
       fontWeight: 'bold',
+      color: 'black',
       marginTop: 10
     },
     description: {

@@ -1,12 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screen/HomeScreen';
-import MaleScreen from '../screen/MaleScreen';
-import FemaleScreen from '../screen/FemaleScreen';
-import LoginScreen from '../screen/LoginScreen/LoginScreen';
+import TranScreen from '../screen/TranScreen';
 import HomeStack from './HomeStack';
 import LoginStack from './LoginStack';
-import CartScreen from '../screen/CartScreen'
+import CartStack from './CartStack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tab = createBottomTabNavigator();
@@ -29,18 +26,18 @@ const BottomTabNav = () => {
                     ),
                 }}
             />
-            <Tab.Screen component={MaleScreen} name="Cart"
+            <Tab.Screen component={CartStack} name="CartStack"
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons name="cart-outline" color={color} size={25} />
                     ),
                 }} />
-            <Tab.Screen component={FemaleScreen} name="Female"
+            <Tab.Screen component={TranScreen} name="Tran"
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color }) => (
-                        <MaterialCommunityIcons name="cart-outline" color={color} size={25} />
+                        <MaterialCommunityIcons name="history" color={color} size={25} />
                     ),
                 }} />
             <Tab.Screen component={LoginStack} name="Login"
