@@ -3,39 +3,50 @@ import { View, Text, Button, StyleSheet, TextInput, RadioButton, TouchableOpacit
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient';
-import { AuthContext } from '../components/context';
+import { Picker } from "@react-native-picker/picker";
 
 
 function RegisterScreen({ navigation }) {
 
+    const [selectedOption, setSelectedOption] = React.useState(-1);
+
     const [data, setData] = React.useState({
         userName: '',
-        password: '',
-        check_textInputChange: false,
+        userPhone: '',
+        userAddress: '',
+        userEmail: '',
+        userPassword: '',
+        repeatPassword: '',
         secureTextEntry: true
     });
 
-    const textInputChange = (val) => {
-        if (val.length != 0) {
-            setData({
-                ...data,
-                userName: val,
-                check_textInputChange: true
+    const register = async ()  => {
+        try {
+            const obj = { name: data.userName, 
+                            email: data.userEmail, 
+                                password: data.userPassword,
+                                    gender: selectedOption,
+                                        address: data.userAddress,
+                                            phone: data.userPhone };
+            const response = await fetch('http://10.0.2.2:8000/api/register', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(obj)
             });
-        } else {
-            setData({
-                ...data,
-                userName: val,
-                check_textInputChange: false
-            });
-        }
-    }
-
-    const handlePasswordChange = (val) => {
-        setData({
-            ...data,
-            password: val,
-        });
+            const result = await response.json();
+            console.log(result);
+            if (result.status == "OK") {
+                Alert.alert("Đăng ký thành công");
+                navigation.goBack();
+            } else {
+                Alert.alert("Đăng ký không thành công");
+            }
+          }
+          catch (err) {
+            console.log(err);
+          }
     }
 
     const updateSecureEntry = () => {
@@ -55,7 +66,12 @@ function RegisterScreen({ navigation }) {
                             placeholder="Họ và tên *"
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => textInputChange(val)}
+                            onChangeText={(val) => {
+                                setData({
+                                    ...data,
+                                    userName: val
+                                });
+                            }}
                         />
                     </View>
 
@@ -64,6 +80,12 @@ function RegisterScreen({ navigation }) {
                             placeholder="Số điện thoại *"
                             style={styles.textInput}
                             autoCapitalize="none"
+                            onChangeText={(val) => {
+                                setData({
+                                    ...data,
+                                    userPhone: val
+                                });
+                            }}
                         />
                     </View>
 
@@ -72,8 +94,24 @@ function RegisterScreen({ navigation }) {
                             placeholder="Địa chỉ *"
                             style={styles.textInput}
                             autoCapitalize="none"
+                            onChangeText={(val) => {
+                                setData({
+                                    ...data,
+                                    userAddress: val
+                                });
+                            }}
                         />
                     </View>
+
+                    <Picker
+                        useNativeAndroidPickerStyle={false}
+                        selectedValue={selectedOption}
+                        onValueChange={(itemValue) =>
+                            setSelectedOption(itemValue)}>
+                        <Picker.Item label='Giới tính' value='-1' />
+                        <Picker.Item label='Nam' value='1' />
+                        <Picker.Item label='Nữ' value='0' />
+                    </Picker>
 
                     <View style={[styles.action, { marginTop: 35 }]}>
                         <FontAwesome
@@ -85,15 +123,13 @@ function RegisterScreen({ navigation }) {
                             placeholder="Email *"
                             style={styles.textInput}
                             autoCapitalize="none"
-                            onChangeText={(val) => textInputChange(val)}
+                            onChangeText={(val) => {
+                                setData({
+                                    ...data,
+                                    userEmail: val
+                                });
+                            }}
                         />
-                        {data.check_textInputChange ?
-                            <Feather
-                                name="check-circle"
-                                color="green"
-                                size={20}
-                            ></Feather>
-                            : null}
                     </View>
                     <View style={[styles.action, { marginTop: 35 }]}>
                         <Feather
@@ -106,7 +142,12 @@ function RegisterScreen({ navigation }) {
                             style={styles.textInput}
                             autoCapitalize="none"
                             secureTextEntry={data.secureTextEntry ? true : false}
-                            onChangeText={(val) => handlePasswordChange(val)}
+                            onChangeText={(val) => {
+                                setData({
+                                    ...data,
+                                    userPassword: val
+                                });
+                            }}
                         />
                         <TouchableOpacity onPress={updateSecureEntry}>
                             {data.secureTextEntry ?
@@ -134,7 +175,12 @@ function RegisterScreen({ navigation }) {
                             style={styles.textInput}
                             autoCapitalize="none"
                             secureTextEntry={data.secureTextEntry ? true : false}
-                            onChangeText={(val) => handlePasswordChange(val)}
+                            onChangeText={(val) => {
+                                setData({
+                                    ...data,
+                                    repeatPassword: val
+                                });
+                            }}
                         />
                         <TouchableOpacity onPress={updateSecureEntry}>
                             {data.secureTextEntry ?
@@ -151,10 +197,10 @@ function RegisterScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                         <Text style={{ marginTop: 20, fontWeight: "bold", color: "#000", fontSize: 15 }}>BẠN ĐÃ CÓ TÀI KHOẢN</Text>
 
-                        <Text style={{ marginTop: 20, fontWeight: "bold", color: "#000", fontSize: 15, marginLeft: 20 }} onPress={() => {navigation.goBack()}}>
+                        <Text style={{ marginTop: 20, fontWeight: "bold", color: "#000", fontSize: 15, marginLeft: 20 }} onPress={() => { navigation.goBack() }}>
                             Đăng nhập
                         </Text>
                     </View>
@@ -164,7 +210,7 @@ function RegisterScreen({ navigation }) {
                             colors={['#000', '#000']}
                             style={styles.signIn}
                         >
-                            <Text style={[styles.textSign, { color: "#FFF" }]} onPress={() => { login() }}>
+                            <Text style={[styles.textSign, { color: "#FFF" }]} onPress={register}>
                                 ĐĂNG KÝ
                             </Text>
                         </LinearGradient>

@@ -12,11 +12,12 @@ interface ProductProps {
   category_id: string;
   price: number;
   description: string;
-  image: string
+  image: string;
+  image_list: string;
   detail_products: object[]
 }
 
-const HomeScreen = ({ searchValue }: { searchValue: string }) => {
+const HomeScreen = ({ searchValue } : { searchValue: string }) => {
   const context = React.useContext(DataContext);
   const url = 'http://10.0.2.2:8000';
 

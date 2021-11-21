@@ -5,6 +5,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient';
 import { DataContext } from "../../service/Context";
 import ProfileScreen from '../ProfileScreen/ProfileScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -63,6 +64,7 @@ function LoginScreen({ navigation }) {
       if (result.status == "OK") {
         Alert.alert("Đăng nhập thành công");
         context.addUser(result.results.info);
+        await AsyncStorage.setItem('@storage_Key', result.results.token);
       }
       if (result.status == "NG") {
         Alert.alert("Đăng nhập không thành công");
