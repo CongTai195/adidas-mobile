@@ -32,7 +32,7 @@ const ImageCarousel = ({images} : {images : string[]}) => {
                 {images.map((image, index) => (
                     <View 
                         style={[styles.dot, {
-                            backgroundColor: index == activeIndex ? "#c9c9c9" : "#ededed"
+                            backgroundColor: index == activeIndex ? "#a8a8a8" : "#ededed"
                         }]}
                         />
                 ))}
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     },
     image:{
         margin: 10,
-        height: 250,
+        height: 350,
         resizeMode: 'contain'
     },
     dot: {

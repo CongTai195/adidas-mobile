@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         borderWidth: 1,
-        borderColor: '#e3e3e3'
+        borderColor: '#e3e3e3',
+        marginTop: 20
     },
     button: {
         width: 35,

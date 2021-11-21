@@ -14,7 +14,7 @@ interface ProductItemProps{
     };
 }
 
-const ProductItem = ({item}: ProductItemProps) => {
+const ProductItem = ({item}) => {
   const navigation = useNavigation();
 
   const price = item.price;

@@ -11,8 +11,6 @@ export class DataProvider extends Component {
         this.state = {
             products: [],
             cart: [],
-            selectd_quantity: 0,
-            selectd_size: 0,
             selectd_color: "",
             total: 0,
             category_product: [],
@@ -40,16 +38,13 @@ export class DataProvider extends Component {
     };
 
     addCart = (id, size, quantity) => {
-        const { products, cart } = this.state;
+        const { products} = this.state;
         const data1 = products.filter(products => {
             return products.id == id
         })
-        //const temp = Object.assign(data1)
         const obj_yourcart = {}
         for (const [key, value] of Object.entries(data1)) {
-            //var temp_obj = {}
             for (const [key1, value1] of Object.entries(value)) {
-                //console.log("key: ", key1, " value: ", value1)
                 if (key1 == "detail_products") {
                     obj_yourcart.size = size
                     obj_yourcart.quantity = quantity
@@ -59,16 +54,12 @@ export class DataProvider extends Component {
                 }
             }
         }
-        //console.log("obj_yourcart: ", obj_yourcart)
         this.setState(i => ({
             cart: [...i.cart, obj_yourcart]
         }))
     };
-    addSize = (size) => {
-        this.setState({ selectd_size: size })
-    };
-    addQuantity = (quantity) => {
-        this.setState({ selectd_quantity: quantity })
+    clearCart = () => {
+        this.setState({cart: []});
     }
     removeProduct = (id) => {
         const { cart } = this.state;
@@ -78,28 +69,18 @@ export class DataProvider extends Component {
             }
         })
         this.setState({ cart: cart })
-        this.getTotal()
     };
-    getTotal = () => {
-        const { cart } = this.state;
-        const res = cart.reduce((prev, item) => {
-            return prev + (item.price * item.quantity)
-        }, 0)
-
-        this.setState({ total: res })
-    }
     addUser = (user) => {
         this.setState({ user: user });
-
     }
 
     render() {
-        const { products, cart, selectd_quantity, selectd_size, selectd_color, total, category_product, user } = this.state;
-        const { addCart, addSize, addQuantity, removeProduct, getTotal, addUser } = this;
+        const { products, cart, total, user } = this.state;
+        const { addCart, removeProduct, addUser, clearCart, getAllproducts } = this;
         return (
             <DataContext.Provider value={{
-                products, cart, selectd_quantity, selectd_size, total, category_product, user,
-                addCart, addSize, addQuantity, removeProduct, getTotal, addUser
+                products, cart, total, user,
+                addCart, removeProduct, addUser, clearCart, getAllproducts
             }}>
                 {this.props.children}
             </DataContext.Provider>
