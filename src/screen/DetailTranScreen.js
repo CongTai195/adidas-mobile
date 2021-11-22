@@ -16,13 +16,23 @@ const DetailTranScreen = () => {
                 {
                     item.status == 1 ? 
                     <Text style={[styles.textInfo, {color: 'green'}]}>Đặt hàng thành công</Text>
-                     : 
+                    :
+                    item.status == 2 ?
+                    <Text style={[styles.textInfo, {color: 'green'}]}>Đang giao hàng</Text> 
+                    :
+                    item.status == 3 ?
+                    <Text style={[styles.textInfo, {color: 'green'}]}>Giao hàng thành công</Text> 
+                    : 
                     <Text style={[styles.textInfo, {color: 'red'}]}>Đơn đã hủy</Text>
                 }
             </View>
             <View style={styles.info}>
                 <Text style={styles.textHeaderInfo}>Thông tin vận chuyển</Text>
                 <Text style={styles.textInfo}>{item.shipping}</Text>
+            </View>
+            <View style={styles.info}>
+                <Text style={styles.textHeaderInfo}>Thông tin thanh toán</Text>
+                <Text style={styles.textInfo}>{item.payment}</Text>
             </View>
             <View style={styles.info}>
                 <Text style={styles.textHeaderInfo}>Địa chỉ nhận hàng</Text>

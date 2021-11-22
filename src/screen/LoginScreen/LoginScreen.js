@@ -6,10 +6,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import { DataContext } from "../../service/Context";
 import ProfileScreen from '../ProfileScreen/ProfileScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 
 
-function LoginScreen({ navigation }) {
+function LoginScreen() {
+
+  const navigation = useNavigation();
 
   const context = useContext(DataContext);
   const user = context.user;
@@ -51,29 +55,41 @@ function LoginScreen({ navigation }) {
   }
 
   const login = async () => {
-    try {
-      const obj = { email: data.userName, password: data.password };
-      const response = await fetch('http://10.0.2.2:8000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(obj)
+    // try {
+    //   const obj = { email: data.userName, password: data.password };
+    //   const response = await fetch('http://10.0.2.2:8000/api/login', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(obj)
+    //   });
+    //   const result = await response.json();
+    //   if (result.status == "OK") {
+    //     Alert.alert("Đăng nhập thành công");
+    //     context.addUser(result.results.info);
+    //     await AsyncStorage.setItem('@storage_Key', result.results.token);
+    //   }
+    //   if (result.status == "NG") {
+    //     Alert.alert("Đăng nhập không thành công");
+    //     console.log(result);
+    //   }
+    // }
+    // catch (err) {
+    //   console.log(err);
+    // }
+    const loginData = { email: data.userName , password: data.password }
+    axios.post('http://10.0.2.2:8000/api/login', loginData)
+      .then(res => {
+        if (res.data.status == "OK") {
+          context.addUser(res.data.results.info);
+          Alert.alert("Đăng nhập thành công");
+          AsyncStorage.setItem('@storage_Key', res.data.results.token);
+        }
+      })
+      .catch(err => {
+        alert(err);
       });
-      const result = await response.json();
-      if (result.status == "OK") {
-        Alert.alert("Đăng nhập thành công");
-        context.addUser(result.results.info);
-        await AsyncStorage.setItem('@storage_Key', result.results.token);
-      }
-      if (result.status == "NG") {
-        Alert.alert("Đăng nhập không thành công");
-        console.log(result);
-      }
-    }
-    catch (err) {
-      console.log(err);
-    }
   }
   if (user.length == 0) {
     return (
@@ -229,103 +245,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
-
-// import React, { Component } from 'react'
-// import { TouchableOpacity } from 'react-native';
-// import { Text, View, Dimensions, Image } from 'react-native'
-// import { Provider, TextInput, Title, Button, HelperText, Avatar, Portal, Modal, ProgressBar } from 'react-native-paper'
-// import { login } from '../service/UserService';
-// import { Keyboard } from 'react-native'
-
-// export default class LoginScreen extends Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             password: '',
-//             email: '',
-//             mes: '',
-//             visible: false
-//         }
-//     }
-//     signUp = () => {
-//         this.props.signup();
-//     }
-//     login = async () => {
-//         this.setState(
-//             {
-//                 visible: true
-//             })
-//         Keyboard.dismiss();
-//         await login(this.state.email, this.state.password)
-//             .then(res => {
-//                 if (res != null) {
-//                     //this.props.data(res)
-//                     console.log(res);
-//                 }
-//                 else {
-//                     this.setState({
-//                         mes: 'Username or Password is invalid'
-//                     })
-//                 }
-//             })
-//             .catch(err => console.log(err));
-//         this.setState(
-//             {
-//                 visible: false
-//             })
-//     }
-//     render() {
-//         return (
-//             <Provider>
-//                 <View style={{ backgroundColor: 'white', flex: 1, justifyContent: 'center' }}>
-//                     <View style={{ flex: 30 }}>
-//                         <TextInput
-//                             placeholder='Username'
-//                             mode='outlined'
-//                             left={<TextInput.Icon name="account" />}
-//                             theme={{ colors: { primary: '#134563', underlineColor: 'transparent', placeholder: '#134563' } }}
-//                             style={{ padding: 20 }}
-//                             value={this.state.email}
-//                             onChangeText={email => { this.setState({ email: email }) }}
-//                         />
-//                         <TextInput
-//                             placeholder='Password'
-//                             mode='outlined'
-//                             secureTextEntry
-//                             left={<TextInput.Icon name="lock" />}
-//                             theme={{ colors: { primary: '#134563', underlineColor: 'transparent', placeholder: '#134563' } }}
-//                             style={{ padding: 20 }}
-//                             value={this.state.password}
-//                             onChangeText={password => { this.setState({ password: password }) }}
-//                         />
-//                         <TouchableOpacity
-//                             style={{
-//                                 bottom: 0,
-//                                 marginRight: 20,
-//                                 justifyContent: 'flex-end',
-//                                 alignItems: 'flex-end'
-//                             }}>
-//                             <Text style={{ color: 'grey' }}>Forgot Password ?</Text>
-//                         </TouchableOpacity>
-//                         <Text style={{ color: 'red', marginLeft: 40 }}>{this.state.mes}</Text>
-//                     </View>
-//                     <View style={{ flex: 30, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-//                         <Button
-//                             mode="contained"
-//                             onPress={this.login}
-//                             color='#134563'
-//                             style={{
-//                                 width: Dimensions.get('window').width / 3,
-//                                 height: Dimensions.get('window').height / 16,
-//                                 justifyContent: 'center',
-//                                 alignItems: 'center',
-//                                 marginLeft: 20
-//                             }}>
-//                             Sign In
-//                     </Button>
-//                     </View>
-//                 </View>
-//             </Provider>
-//         )
-//     }
-// }

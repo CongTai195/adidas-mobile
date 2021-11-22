@@ -4,14 +4,52 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient';
 import { DataContext } from '../../service/Context';
-import Button from '../../components/Button'
+import Button from '../../components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function ProfileScreen({name, phone, email, address }) {
     const context = React.useContext(DataContext);
 
-    const logout = () => {
-        context.addUser([])
+    const logout = async () => {
+        Alert.alert(
+            "",
+            "Bạn chắc chắn muốn đăng xuất chứ?",
+            [
+                // The "Yes" button
+                {
+                    text: "Có",
+                    onPress: async () => {
+                        try {
+                            //console.log(await AsyncStorage.getItem('@storage_Key'));
+                            const response = await fetch('http://10.0.2.2:8000/api/logout', {
+                              method: 'GET',
+                              headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer ' + await AsyncStorage.getItem('@storage_Key')
+                              },
+                            });
+                            const result = await response.json();
+                            if (result.status == "OK"){
+                                context.addUser([]);
+                                await AsyncStorage.removeItem('@storage_Key');
+                            }
+                            else {
+                                console.log("Đăng xuất kh thành công")
+                            }
+                          }
+                          catch (err) {
+                            console.log(err);
+                          }
+                    },
+                },
+                // The "No" button
+                // Does nothing but dismiss the dialog when tapped
+                {
+                    text: "Không",
+                },
+            ]
+        );
     }
 
     return (

@@ -20,7 +20,7 @@ const ProductItem = ({item}) => {
   const price = item.price;
   
   const onPress = () => {
-    navigation.navigate("Detail", {item: item});
+    navigation.navigate("Detail", {id: item.id});
   }
     return (
       <Pressable onPress={onPress}>
