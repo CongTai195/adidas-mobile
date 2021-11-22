@@ -15,17 +15,15 @@ function CheckoutScreen() {
 
     const navigation = useNavigation();
 
-    const [shippingSelectedOption, setShippingSelectedOption] = React.useState('');
+    const [shippingSelectedOption, setShippingSelectedOption] = React.useState('Giao hàng nhanh');
 
-    const [paymentSelectedOption, setPaymentSelectedOption] = React.useState('');
+    const [paymentSelectedOption, setPaymentSelectedOption] = React.useState('Thẻ ATM nội địa');
 
     const user = context.user;
     const cart = context.cart;
     const totalPrice = cart.reduce((summedPrice, product) => (
         summedPrice + product.price * product.quantity
     ), 0);
-
-    console.log(cart);
 
     const addTran = async () => {
         try {
@@ -125,9 +123,9 @@ function CheckoutScreen() {
                             selectedValue={paymentSelectedOption}
                             onValueChange={(itemValue) =>
                                 setPaymentSelectedOption(itemValue)}>
-                            <Picker.Item label="Thẻ ATM nội địa" value="ATM" />
-                            <Picker.Item label="Thanh toán khi nhận hàng" value="COD" />
-                            <Picker.Item label="Thanh toán ví Momo" value="Momo" />
+                            <Picker.Item label="Thẻ ATM nội địa" value="Thẻ ATM nội địa" />
+                            <Picker.Item label="Thanh toán khi nhận hàng" value="Thanh toán khi nhận hàng" />
+                            <Picker.Item label="Thanh toán ví Momo" value="Thanh toán ví Momo" />
                         </Picker>
                     </View>
                     <View style={styles.footer}>

@@ -21,7 +21,7 @@ const HomeScreen = ({ searchValue } : { searchValue: string }) => {
   const context = React.useContext(DataContext);
   const url = 'http://10.0.2.2:8000';
 
-  const [products, setProducts] = useState<ProductProps>([]);
+  const [products, setProducts] = useState([]);
   // useEffect(() => {
   //   const fetchProducts = async () => {
   //     try {
@@ -32,33 +32,35 @@ const HomeScreen = ({ searchValue } : { searchValue: string }) => {
   //         },
   //       });
   //       const result = await response.json();
-  //       //setProducts(result.results);
-  //       context.products
+  //       setProducts(result.results);
   //     } catch (error) {
   //       console.log(error);
   //     }
   //   };
   //   fetchProducts();
-  // }, []);
+  // }, [searchValue]);
 
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, []);
-
-  // const fetchProducts = () => {
-  //   axios.get('http://10.0.0.2:8000/api/product')
-  //         .then(res => {
-  //             setProducts(res.data.results);;
-  //             console.log("data: ", res.data.results)
-  //         }).catch(err => {
-  //             console.log("Err: ", err)
-  //         })};
+  useEffect(() => {
+    fetchProducts();
+  }, [searchValue]);
+  //`http://10.0.2.2:8000/api/product/user/search?name=${searchValue}`
+  const fetchProducts = () => {
+    axios.get(`http://10.0.2.2:8000/api/product/user/search?name=${searchValue}`)
+          .then(res => {
+              setProducts(res.data.results);
+          }).catch(err => {
+              console.log("Err: ", err)
+          })
+    };
   //   fetchProducts();
 
   return (
     <View style={styles.page}>
       <FlatList
-        data={context.products}
+        keyExtractor={(item, index) => {
+        return item.id;
+        }}
+        data={products}
         renderItem={({ item }) => <ProductItem item={item} />}
         showsVerticalScrollIndicator={false}
       />

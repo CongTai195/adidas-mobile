@@ -22,19 +22,30 @@ export class DataProvider extends Component {
         this.getAllproducts()
     };
 
-    getAllproducts = async () => {
-        try {
-            const response = await fetch(`http://10.0.2.2:8000/api/product`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+    getAllproducts = () => {
+        // try {
+        //     const response = await fetch(`http://10.0.2.2:8000/api/product`, {
+        //         method: 'GET',
+        //         headers: {
+        //             'Accept': 'application/json, text/plain, */*',
+        //             'Content-Type': 'application/json'
+        //         },
+        //     });
+        //     const result = await response.json();
+        //     this.setState({ products: (result.results) });
+        // } catch (error) {
+        //     console.log(error);
+        // }
+        axios.get(`http://10.0.2.2:8000/api/product`)
+            .then(res => {
+                console.log("Data: ", res.data.results.length)
+                this.setState({
+                    products: res.data.results
+                });
+                console.log("data: ", res.data.results)
+            }).catch(err => {
+                console.log("Err: ", err)
             });
-            const result = await response.json();
-            this.setState({ products: (result.results) });
-        } catch (error) {
-            console.log(error);
-        }
     };
 
     addCart = (id, size, quantity) => {

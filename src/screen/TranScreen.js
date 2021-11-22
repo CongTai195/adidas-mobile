@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { FlatList,Pressable, View, Text, StyleSheet, TextInput, RadioButton, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { FlatList, Pressable, View, Text, StyleSheet, TextInput, RadioButton, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { DataContext } from '../service/Context';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoginScreen from '../screen/LoginScreen/LoginScreen';
+import axios from 'axios';
 
 function TranScreen() {
   const context = React.useContext(DataContext);
@@ -16,50 +18,78 @@ function TranScreen() {
   const cart = context.cart;
 
   React.useEffect(() => {
-    getTran();
+    if (user.length !== 0) {
+      getTran();
+    }
   }, [user.id, cart.length]);
 
   const getTran = async () => {
-    try {
-      const response = await fetch(`http://10.0.2.2:8000/api/transaction/${user.id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + await AsyncStorage.getItem('@storage_Key')
-        },
+    // try {
+    //   const response = await fetch(`http://127.0.0.1:8000/api/transaction/`, {
+    //     method: 'GET',
+    //     headers: {
+    //       'Accept': 'application/json, text/plain, */*',
+    //       'Content-Type': 'application/json',
+    //       'Authorization': 'Bearer ' + await AsyncStorage.getItem('@storage_Key')
+    //     },
+    //   });
+    //   const result = await response.json();
+    //   setTranItem(result.results);
+    //   console.log(await AsyncStorage.getItem('@storage_Key'));
+    // }
+    // catch (err) {
+    //   console.log(err);
+    // }
+    const authAxios = axios.create({
+      baseURL: "http://10.0.2.2:8000/api/",
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + await AsyncStorage.getItem('@storage_Key')
+      },
+
+    });
+    authAxios.get(`http://10.0.2.2:8000/api/transaction`)
+      .then(res => {
+        if (res.data.status == "OK") {
+          setTranItem(res.data.results);
+        }
+      })
+      .catch(err => {
+        console.log(err);
       });
-      const result = await response.json();
-      setTranItem(result.results);
-    }
-    catch (err) {
-      console.log(err);
-    }
   }
-  return (
-    <View style={styles.container}>
-      <View style={styles.footer}>
-        <Text style={styles.text_header}> Theo dõi đơn hàng </Text>
-        <FlatList
-          data={tranItem.reverse()}
-          renderItem={({ item }) => (
-            <Pressable onPress={() => {
-              navigation.navigate('DetailTran', {item: item});
-            }}>
-              <View style={styles.root}>
-                {/* <Image style={styles.image} source={{ uri: item.image }} /> */}
-                <View style={styles.rightContainer}>
-                  <Text style={styles.title} numberOfLines={3}>
-                    Đơn hàng ngày {item.created_at.slice(0,10)} trị giá {item.amount.toLocaleString('vi-VN')} VND
-                </Text>
+  if (user.length == 0) {
+    return (
+      <LoginScreen />
+    );
+  }
+  //else return null;
+  else 
+    return (
+      <View style={styles.container}>
+        <View style={styles.footer}>
+          <Text style={styles.text_header}> Theo dõi đơn hàng </Text>
+          <FlatList
+            data={tranItem.reverse()}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => {
+                navigation.navigate('DetailTran', {item: item});
+              }}>
+                <View style={styles.root}>
+                  {/* <Image style={styles.image} source={{ uri: item.image }} /> */}
+                  <View style={styles.rightContainer}>
+                    <Text style={styles.title} numberOfLines={3}>
+                      Đơn hàng ngày {item.created_at.slice(0,10)} trị giá {item.amount.toLocaleString('vi-VN')} VND
+                  </Text>
+                  </View>
                 </View>
-              </View>
-            </Pressable>
-          )}
-          showsVerticalScrollIndicator={false}
-        />
+              </Pressable>
+            )}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
       </View>
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
