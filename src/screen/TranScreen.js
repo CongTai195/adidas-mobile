@@ -18,10 +18,10 @@ function TranScreen() {
   const cart = context.cart;
 
   React.useEffect(() => {
-    if (user.length !== 0) {
+    // if (user.length !== 0) {
       getTran();
-    }
-  }, [user.id, cart.length]);
+    //}
+  }, [user.length, cart.length]);
 
   const getTran = async () => {
     // try {
@@ -51,6 +51,7 @@ function TranScreen() {
     authAxios.get(`http://10.0.2.2:8000/api/transaction`)
       .then(res => {
         if (res.data.status == "OK") {
+          console.log(res.data.results);
           setTranItem(res.data.results);
         }
       })
@@ -70,7 +71,7 @@ function TranScreen() {
         <View style={styles.footer}>
           <Text style={styles.text_header}> Theo dõi đơn hàng </Text>
           <FlatList
-            data={tranItem.reverse()}
+            data={tranItem.sort().reverse()}
             renderItem={({ item }) => (
               <Pressable onPress={() => {
                 navigation.navigate('DetailTran', {item: item});
