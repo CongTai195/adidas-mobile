@@ -26,6 +26,7 @@ const DetailScreen = () => {
 
     const fetchProduct = () => {
         axios.get(`http://10.0.2.2:8000/api/product/${id}`)
+        //axios.get(`https://shop-adidas.herokuapp.com/api/product/${id}`)
             .then(res => {
                 setProduct(res.data.results);;
             }).catch(err => {

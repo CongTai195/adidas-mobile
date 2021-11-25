@@ -1,6 +1,5 @@
 import React, { Component, createContext } from 'react';
 import axios from 'axios';
-import products from '../data/products';
 
 export const DataContext = createContext();
 
@@ -11,9 +10,6 @@ export class DataProvider extends Component {
         this.state = {
             products: [],
             cart: [],
-            selectd_color: "",
-            total: 0,
-            category_product: [],
             user: [],
         }
     }
@@ -37,12 +33,12 @@ export class DataProvider extends Component {
         //     console.log(error);
         // }
         axios.get(`http://10.0.2.2:8000/api/product`)
+        //axios.get(`https://shop-adidas.herokuapp.com/api/product`)
             .then(res => {
                 console.log("Data: ", res.data.results.length)
                 this.setState({
                     products: res.data.results
                 });
-                console.log("data: ", res.data.results)
             }).catch(err => {
                 console.log("Err: ", err)
             });
@@ -86,7 +82,7 @@ export class DataProvider extends Component {
     }
 
     render() {
-        const { products, cart, total, user } = this.state;
+        const { products, cart, user } = this.state;
         const { addCart, removeProduct, addUser, clearCart, getAllproducts } = this;
         return (
             <DataContext.Provider value={{

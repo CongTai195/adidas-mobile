@@ -78,7 +78,13 @@ function LoginScreen() {
     // catch (err) {
     //   console.log(err);
     // }
-    const loginData = { email: data.userName , password: data.password }
+    setData({
+      userName: '',
+      password: '',
+      check_textInputChange: false,
+      secureTextEntry: true
+    });
+    const loginData = { email: data.userName, password: data.password }
     axios.post('http://10.0.2.2:8000/api/login', loginData)
       .then(res => {
         if (res.data.status == "OK") {
@@ -88,7 +94,7 @@ function LoginScreen() {
         }
       })
       .catch(err => {
-        alert(err);
+        Alert.alert("Đăng nhập không thành công");
       });
   }
   if (user.length == 0) {
