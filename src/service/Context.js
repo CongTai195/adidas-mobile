@@ -1,5 +1,6 @@
 import React, { Component, createContext } from 'react';
 import axios from 'axios';
+import {ENV} from '../const/env';
 
 export const DataContext = createContext();
 
@@ -32,10 +33,10 @@ export class DataProvider extends Component {
         // } catch (error) {
         //     console.log(error);
         // }
-        axios.get(`http://10.0.2.2:8000/api/product`)
-        //axios.get(`https://shop-adidas.herokuapp.com/api/product`)
+        //axios.get(`http://10.0.2.2:8000/api/product`)
+        axios.get(`${ENV.BASE_URL}product`)
             .then(res => {
-                console.log("Data: ", res.data.results.length)
+                console.log("Data: ", res.data.results.length);
                 this.setState({
                     products: res.data.results
                 });
@@ -86,7 +87,7 @@ export class DataProvider extends Component {
         const { addCart, removeProduct, addUser, clearCart, getAllproducts } = this;
         return (
             <DataContext.Provider value={{
-                products, cart, total, user,
+                products, cart, user,
                 addCart, removeProduct, addUser, clearCart, getAllproducts
             }}>
                 {this.props.children}

@@ -4,6 +4,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient';
 import { Picker } from "@react-native-picker/picker";
+import {ENV} from '../const/env';
 
 
 function RegisterScreen({ navigation }) {
@@ -28,7 +29,7 @@ function RegisterScreen({ navigation }) {
                                     gender: selectedOption,
                                         address: data.userAddress,
                                             phone: data.userPhone };
-            const response = await fetch('http://10.0.2.2:8000/api/register', {
+            const response = await fetch(`${ENV.BASE_URL}register`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -51,6 +52,7 @@ function RegisterScreen({ navigation }) {
 
     const updateSecureEntry = () => {
         setData({
+            ...data,
             secureTextEntry: !data.secureTextEntry
         });
     }
@@ -62,6 +64,11 @@ function RegisterScreen({ navigation }) {
                     <Text style={styles.text_header}> ĐĂNG KÝ </Text>
 
                     <View style={[styles.action, { marginTop: 20 }]}>
+                    <FontAwesome
+                            name="user-o"
+                            color="#05375a"
+                            size={20}
+                        />
                         <TextInput
                             placeholder="Họ và tên *"
                             style={styles.textInput}
@@ -76,6 +83,11 @@ function RegisterScreen({ navigation }) {
                     </View>
 
                     <View style={[styles.action, { marginTop: 20 }]}>
+                    <FontAwesome
+                            name="phone"
+                            color="#05375a"
+                            size={20}
+                        />
                         <TextInput
                             placeholder="Số điện thoại *"
                             style={styles.textInput}
@@ -90,6 +102,11 @@ function RegisterScreen({ navigation }) {
                     </View>
 
                     <View style={[styles.action, { marginTop: 20 }]}>
+                    <FontAwesome
+                            name="map-marker"
+                            color="#05375a"
+                            size={20}
+                        />
                         <TextInput
                             placeholder="Địa chỉ *"
                             style={styles.textInput}

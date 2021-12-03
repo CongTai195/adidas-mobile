@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { DataContext } from '../../service/Context';
 import Button from '../../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ENV} from '../../const/env';
 
 
 function ProfileScreen({name, phone, email, address }) {
@@ -22,7 +23,7 @@ function ProfileScreen({name, phone, email, address }) {
                     onPress: async () => {
                         try {
                             //console.log(await AsyncStorage.getItem('@storage_Key'));
-                            const response = await fetch('http://10.0.2.2:8000/api/logout', {
+                            const response = await fetch(`${ENV.BASE_URL}logout`, {
                               method: 'GET',
                               headers: {
                                 'Content-Type': 'application/json',
@@ -59,6 +60,11 @@ function ProfileScreen({name, phone, email, address }) {
                     <Text style={styles.text_header}> Thông tin cá nhân </Text>
 
                     <View style={[styles.action, { marginTop: 20 }]}>
+                    <FontAwesome
+                            name="user-o"
+                            color="#05375a"
+                            size={20}
+                        />
                         <TextInput
                             value={name}
                             style={styles.textInput}
@@ -67,6 +73,11 @@ function ProfileScreen({name, phone, email, address }) {
                     </View>
 
                     <View style={[styles.action, { marginTop: 20 }]}>
+                    <FontAwesome
+                            name="phone"
+                            color="#05375a"
+                            size={20}
+                        />
                         <TextInput
                             value={phone}
                             style={styles.textInput}
@@ -75,6 +86,11 @@ function ProfileScreen({name, phone, email, address }) {
                     </View>
 
                     <View style={[styles.action, { marginTop: 20 }]}>
+                    <FontAwesome
+                            name="user-o"
+                            color="#05375a"
+                            size={20}
+                        />
                         <TextInput
                             value={email}
                             style={styles.textInput}
@@ -83,6 +99,11 @@ function ProfileScreen({name, phone, email, address }) {
                     </View>
 
                     <View style={[styles.action, { marginTop: 35 }]}>
+                    <FontAwesome
+                            name="map-marker"
+                            color="#05375a"
+                            size={20}
+                        />
                         <TextInput
                             value={address}
                             style={styles.textInput}

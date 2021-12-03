@@ -16,6 +16,8 @@ const CartScreen = () => {
     summedPrice + product.price * product.quantity
   ), 0);
 
+  console.log(context.cart);
+
   return (
     <View style={styles.page}>
       {context.cart.length == 0 ?
@@ -30,7 +32,7 @@ const CartScreen = () => {
         <View>
           <Text style={{ fontSize: 18, color: 'black' }}>
             Tạm tính ({context.cart.length} đôi giày): {' '}
-            <Text style={{ color: 'red' }}>{totalPrice.toLocaleString('vi-VN')} VND</Text>
+            <Text style={{ color: 'red' }}>{totalPrice.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</Text>
           </Text>
           <Button text={'Thanh toán'} onPress={() => {
             navigation.navigate("Checkout");

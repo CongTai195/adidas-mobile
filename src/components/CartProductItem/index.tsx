@@ -35,7 +35,7 @@ const CartProductItem = ({ cartItem }: CartProductItemProps) => {
                     </Text>
                     <Text style={styles.price}>Size: {cartItem.size}</Text>
                     <Text style={styles.price}>Số lượng: {cartItem.quantity}</Text>
-                    <Text style={styles.price}>Thành tiền: {cartItem.price.toLocaleString("vi-VN")} VND</Text>
+                    <Text style={styles.price}>Thành tiền: {cartItem.price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</Text>
                 </View>
             </View>
             {/* <View style={styles.quantityContainer}>

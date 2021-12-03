@@ -8,6 +8,7 @@ import ProfileScreen from '../ProfileScreen/ProfileScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import {ENV} from '../../const/env';
 
 
 
@@ -85,7 +86,7 @@ function LoginScreen() {
       secureTextEntry: true
     });
     const loginData = { email: data.userName, password: data.password }
-    axios.post('http://10.0.2.2:8000/api/login', loginData)
+    axios.post(`${ENV.BASE_URL}login`, loginData)
       .then(res => {
         if (res.data.status == "OK") {
           context.addUser(res.data.results.info);

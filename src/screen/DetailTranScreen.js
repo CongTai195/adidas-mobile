@@ -1,12 +1,32 @@
 import React from "react";
 import { Alert, ScrollView, View, Text, StyleSheet, Image, useWindowDimensions, FlatList, SafeAreaView } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { DataContext } from '../../service/Context'
+import { DataContext } from '../../service/Context';
+import Button from "../components/Button";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
+import {ENV} from '../const/env';
 
 const DetailTranScreen = () => {
 
     const route = useRoute();
     const item = route.params.item;
+    const cancelTran = async () => {
+        axios.put(`${ENV.BASE_URL}transaction/${item.id}`, 
+        { 
+            headers: {
+                "Authorization" : 'Bearer ' + await AsyncStorage.getItem('@storage_Key'),
+            } }
+        )
+            .then(res => {
+                if (res.data.status == "OK") {
+                    Alert.alert("Hủy đơn thành công");
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
 
     return (
         <ScrollView style={{ margin: 20 }}>
@@ -14,16 +34,16 @@ const DetailTranScreen = () => {
             <View style={styles.info}>
                 <Text style={styles.textHeaderInfo}>Trạng thái</Text>
                 {
-                    item.status == 1 ? 
-                    <Text style={[styles.textInfo, {color: 'green'}]}>Đặt hàng thành công</Text>
-                    :
-                    item.status == 2 ?
-                    <Text style={[styles.textInfo, {color: 'green'}]}>Đang giao hàng</Text> 
-                    :
-                    item.status == 3 ?
-                    <Text style={[styles.textInfo, {color: 'green'}]}>Giao hàng thành công</Text> 
-                    : 
-                    <Text style={[styles.textInfo, {color: 'red'}]}>Đơn đã hủy</Text>
+                    item.status == 1 ?
+                        <Text style={[styles.textInfo, { color: 'green' }]}>Đặt hàng thành công</Text>
+                        :
+                        item.status == 2 ?
+                            <Text style={[styles.textInfo, { color: 'green' }]}>Đang giao hàng</Text>
+                            :
+                            item.status == 3 ?
+                                <Text style={[styles.textInfo, { color: 'green' }]}>Giao hàng thành công</Text>
+                                :
+                                <Text style={[styles.textInfo, { color: 'red' }]}>Đơn đã hủy</Text>
                 }
             </View>
             <View style={styles.info}>
@@ -41,20 +61,22 @@ const DetailTranScreen = () => {
                 <Text style={styles.textInfo}>{item.user_address}</Text>
             </View>
             {item.orders.map(product => (
-                            <View style={styles.root}>
-                            <Image style={styles.image} source={{ uri: product.product.image }} />
-                
-                            <View style={styles.rightContainer}>
-                                <Text style={styles.title} numberOfLines={3}>
-                                    {product.product.name}
-                                </Text>
-                                <Text style={styles.price}>Đơn giá: {product.product.price.toLocaleString('vi-VN')} VND</Text>
-                                <Text style={{ color: "black", textAlign: 'justify', fontSize: 14 }}>Size: {product.size}</Text>
-                                <Text style={{ color: "black", textAlign: 'right', fontSize: 14 }}>Số lượng: {product.quantity}</Text>
-                            </View>
-                        </View>
-                        ))}
-            <Text style={{ marginTop: 10, color: "black", textAlign: 'justify', fontSize: 16, fontWeight: 'bold' }}>Thành tiền: {item.amount.toLocaleString("vi-VN")} VND </Text>
+                <View style={styles.root}>
+                    <Image style={styles.image} source={{ uri: product.product.image }} />
+
+                    <View style={styles.rightContainer}>
+                        <Text style={styles.title} numberOfLines={3}>
+                            {product.product.name}
+                        </Text>
+                        <Text style={styles.price}>Đơn giá: {product.product.price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</Text>
+                        <Text style={{ color: "black", textAlign: 'justify', fontSize: 14 }}>Size: {product.size}</Text>
+                        <Text style={{ color: "black", textAlign: 'right', fontSize: 14 }}>Số lượng: {product.quantity}</Text>
+                    </View>
+                </View>
+            ))}
+            <Text style={{ marginTop: 10, color: "black", textAlign: 'justify', fontSize: 16, fontWeight: 'bold' }}>Thành tiền: {item.amount.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})} </Text>
+            {item.status == 1 ?
+                <Button text="Hủy đơn hàng" onPress={cancelTran} /> : null}
         </ScrollView>
     );
 };

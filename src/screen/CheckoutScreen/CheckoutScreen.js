@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, View, Text, StyleSheet, TextInput, RadioButton, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { Image, View, Text, StyleSheet, TextInput, RadioButton, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient';
@@ -9,6 +9,7 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ENV} from '../../const/env';
 
 function CheckoutScreen() {
     const context = React.useContext(DataContext);
@@ -27,7 +28,7 @@ function CheckoutScreen() {
 
     const addTran = async () => {
         try {
-            const response = await fetch('http://10.0.2.2:8000/api/transaction', {
+            const response = await fetch(`${ENV.BASE_URL}transaction`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,6 +76,11 @@ function CheckoutScreen() {
                         <Text style={styles.text_header}> Thông tin giao hàng </Text>
 
                         <View style={[styles.action, { marginTop: 20 }]}>
+                            <FontAwesome
+                                name="user-o"
+                                color="#05375a"
+                                size={20}
+                            />
                             <TextInput
                                 placeholder="Tên của bạn*"
                                 value={user.name}
@@ -84,6 +90,11 @@ function CheckoutScreen() {
                         </View>
 
                         <View style={[styles.action, { marginTop: 20 }]}>
+                            <FontAwesome
+                                name="phone"
+                                color="#05375a"
+                                size={20}
+                            />
                             <TextInput
                                 placeholder="Số điện thoại giao hàng*"
                                 value={user.phone}
@@ -92,6 +103,11 @@ function CheckoutScreen() {
                             />
                         </View>
                         <View style={[styles.action, { marginTop: 35 }]}>
+                            <FontAwesome
+                                name="map-marker"
+                                color="#05375a"
+                                size={20}
+                            />
                             <TextInput
                                 placeholder="Địa chỉ giao hàng"
                                 value={user.address}
@@ -136,13 +152,13 @@ function CheckoutScreen() {
                                 <Image style={styles.image} source={{ uri: product.image }} />
                                 <Text style={{ color: "black", fontSize: 16 }}>{product.name}</Text>
                                 <View style={styles.rightContainer}>
-                                    <Text style={{ color: "black", textAlign: 'justify', fontSize: 14 }}>Đơn giá: {product.price} VND</Text>
+                                    <Text style={{ color: "black", textAlign: 'justify', fontSize: 14 }}>Đơn giá: {product.price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</Text>
                                     <Text style={{ color: "black", textAlign: 'justify', fontSize: 14 }}>Size: {product.size}</Text>
                                     <Text style={{ color: "black", textAlign: 'right', fontSize: 14 }}>Số lượng: {product.quantity}</Text>
                                 </View>
                             </View>
                         ))}
-                        <Text style={{ marginTop: 10, color: "black", textAlign: 'justify', fontSize: 16, fontWeight: 'bold' }}>Tổng tiền: {totalPrice.toLocaleString("vi-VN")} VND </Text>
+                        <Text style={{ marginTop: 10, color: "black", textAlign: 'justify', fontSize: 16, fontWeight: 'bold' }}>Tổng tiền: {totalPrice.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})} </Text>
                         <Button text="Xác nhận" onPress={() => { addTran() }} />
                     </View>
                 </View>
