@@ -8,6 +8,7 @@ import ImageCarousel from "../../components/ImageCarousel";
 import { useRoute } from '@react-navigation/native';
 import { DataContext } from '../../service/Context';
 import axios from "axios";
+import {ENV} from '../../const/env';
 
 const DetailScreen = () => {
 
@@ -25,8 +26,8 @@ const DetailScreen = () => {
     }, [id]);
 
     const fetchProduct = () => {
-        axios.get(`http://10.0.2.2:8000/api/product/${id}`)
-        //axios.get(`https://shop-adidas.herokuapp.com/api/product/${id}`)
+        //axios.get(`http://10.0.2.2:8000/api/product/${id}`)
+        axios.get(`${ENV.BASE_URL}product/${id}`)
             .then(res => {
                 setProduct(res.data.results);;
             }).catch(err => {
@@ -35,7 +36,7 @@ const DetailScreen = () => {
     };
 
     if (product.length !== 0) {
-        const detailProductArray = product[0].detail_products;
+        const detailProductArray = product[0].detail_products.sort();
 
         const inventory = detailProductArray.filter((e) => {
             return e.size == selectedOption;
@@ -44,7 +45,7 @@ const DetailScreen = () => {
             <ScrollView style={styles.root}>
                 <Text style={styles.title}>{product[0].name}</Text>
                 <ImageCarousel images={product[0].image_list.split("; ")}/>
-                <Text style={styles.price}>Giá tiền: {(product[0].price).toLocaleString("vi-VN")} VND</Text>
+                <Text style={styles.price}>Giá tiền: {(product[0].price).toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</Text>
                 <Text style={{color: 'black'}}>Chọn size giày của bạn</Text>
                 <Picker
                     useNativeAndroidPickerStyle={false}

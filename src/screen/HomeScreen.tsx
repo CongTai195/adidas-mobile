@@ -6,6 +6,7 @@ import ProductItem from '../components/ProductItem';
 import products from '../data/products';
 import { DataContext } from '../service/Context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ENV} from '../const/env';
 import axios from 'axios';
 interface ProductProps {
   id: string;
@@ -49,8 +50,8 @@ const HomeScreen = ({ searchValue } : { searchValue: string }) => {
   }, [searchValue]);
 
   const fetchProducts = () => {
-    axios.get(`http://10.0.2.2:8000/api/product/user/search?name=${searchValue}`)
-    //axios.get(`https://shop-adidas.herokuapp.com/api/product/user/search?name=${searchValue}`)
+    //axios.get(`http://10.0.2.2:8000/api/product/user/search?name=${searchValue}`)
+    axios.get(`${ENV.BASE_URL}product/user/search?name=${searchValue}`)
           .then(res => {
               setProducts(res.data.results);
           }).catch(err => {

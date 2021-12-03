@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginScreen from '../screen/LoginScreen/LoginScreen';
 import axios from 'axios';
+import {ENV} from '../const/env';
 
 function TranScreen() {
   const context = React.useContext(DataContext);
@@ -41,14 +42,14 @@ function TranScreen() {
     //   console.log(err);
     // }
     const authAxios = axios.create({
-      baseURL: "http://10.0.2.2:8000/api/",
+      baseURL: `${ENV.BASE_URL}`,
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + await AsyncStorage.getItem('@storage_Key')
       },
 
     });
-    authAxios.get(`http://10.0.2.2:8000/api/transaction`)
+    authAxios.get(`${ENV.BASE_URL}transaction`)
       .then(res => {
         if (res.data.status == "OK") {
           console.log(res.data.results);
@@ -80,7 +81,7 @@ function TranScreen() {
                   {/* <Image style={styles.image} source={{ uri: item.image }} /> */}
                   <View style={styles.rightContainer}>
                     <Text style={styles.title} numberOfLines={3}>
-                      Đơn hàng ngày {item.created_at.slice(0,10)} trị giá {item.amount.toLocaleString('vi-VN')} VND
+                      Đơn hàng ngày {item.created_at.slice(0,10)} trị giá {item.amount.toLocaleString('vi-VN')}
                   </Text>
                   </View>
                 </View>

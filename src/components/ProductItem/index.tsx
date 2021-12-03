@@ -31,7 +31,7 @@ const ProductItem = ({item}) => {
                 <Text style={styles.title} numberOfLines={3}>
                     {item.name}
                 </Text>
-                <Text style={styles.price}>{price.toLocaleString('vi-VN')} VND</Text>
+                <Text style={styles.price}>{price.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}</Text>
             </View>
         </View>
       </Pressable>
