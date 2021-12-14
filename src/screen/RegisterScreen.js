@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { View, Text, Button, StyleSheet, TextInput, RadioButton, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Alert, Modal, Text, Button, StyleSheet, TextInput, Pressable, TouchableOpacity, ScrollView } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient';
 import { Picker } from "@react-native-picker/picker";
-import {ENV} from '../const/env';
+import { ENV } from '../const/env';
+import axios from 'axios';
 
 
 function RegisterScreen({ navigation }) {
@@ -21,33 +22,40 @@ function RegisterScreen({ navigation }) {
         secureTextEntry: true
     });
 
-    const register = async ()  => {
+    const [modalVisible, setModalVisible] = React.useState(false);
+    const [verifyCode, setVerifyCode] = React.useState("");
+    const [ids, setids] =  React.useState([]);
+
+    const register = async () => {
         try {
-            const obj = { name: data.userName, 
-                            email: data.userEmail, 
-                                password: data.userPassword,
-                                    gender: selectedOption,
-                                        address: data.userAddress,
-                                            phone: data.userPhone };
+            const obj = {
+                name: data.userName,
+                email: data.userEmail,
+                password: data.userPassword,
+                gender: selectedOption,
+                address: data.userAddress,
+                phone: data.userPhone
+            };
             const response = await fetch(`${ENV.BASE_URL}register`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(obj)
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj)
             });
             const result = await response.json();
             console.log(result);
             if (result.status == "OK") {
-                Alert.alert("Đăng ký thành công");
-                navigation.goBack();
+                setids(result.results.id);
+                console.log(ids);
+                setModalVisible(!modalVisible);
             } else {
                 Alert.alert("Đăng ký không thành công");
             }
-          }
-          catch (err) {
+        }
+        catch (err) {
             console.log(err);
-          }
+        }
     }
 
     const updateSecureEntry = () => {
@@ -57,6 +65,54 @@ function RegisterScreen({ navigation }) {
         });
     }
 
+    const verify = async () => {
+        // try {
+        //     const idss = [ids];
+        //     console.log("ids", idss)
+        //     var url = new URL(`${ENV.BASE_URL}verify`),
+        //         params = {
+        //             ids: idss,
+        //             code: verifyCode
+        //         }
+        //     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+        //     const response = await fetch(url, {
+        //         method: 'GET',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //     });
+        //     const result = await response.json();
+        //     console.log(result);
+        //     if (result.status == "OK") {
+        //         Alert.alert("Đăng ký thành công");
+        //         navigation.goBack();
+        //     } else {
+        //         Alert.alert("Đăng ký không thành công");
+        //     }
+        // }
+        // catch (err) {
+        //     console.log(err);
+        // }
+        //const idss = [ids];
+        axios.get(`${ENV.BASE_URL}verify`, {
+            params: {
+              ids: [ids],
+              code: verifyCode
+            }
+          }).then(res => {
+            if (res.data.status == "OK") {
+              Alert.alert("Đăng ký thành công");
+              navigation.goBack();
+            }
+            else {
+                Alert.alert("Đăng ký không thành công");
+            }
+          })
+          .catch(err => {
+            Alert.alert("Đăng nhập không thành công");
+          });
+    }
+
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -64,7 +120,7 @@ function RegisterScreen({ navigation }) {
                     <Text style={styles.text_header}> ĐĂNG KÝ </Text>
 
                     <View style={[styles.action, { marginTop: 20 }]}>
-                    <FontAwesome
+                        <FontAwesome
                             name="user-o"
                             color="#05375a"
                             size={20}
@@ -83,7 +139,7 @@ function RegisterScreen({ navigation }) {
                     </View>
 
                     <View style={[styles.action, { marginTop: 20 }]}>
-                    <FontAwesome
+                        <FontAwesome
                             name="phone"
                             color="#05375a"
                             size={20}
@@ -102,7 +158,7 @@ function RegisterScreen({ navigation }) {
                     </View>
 
                     <View style={[styles.action, { marginTop: 20 }]}>
-                    <FontAwesome
+                        <FontAwesome
                             name="map-marker"
                             color="#05375a"
                             size={20}
@@ -232,6 +288,41 @@ function RegisterScreen({ navigation }) {
                             </Text>
                         </LinearGradient>
                     </View>
+                    <View style={styles.centeredView}>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={modalVisible}
+                            onRequestClose={() => {
+                                Alert.alert("Modal has been closed.");
+                                setModalVisible(!modalVisible);
+                            }}
+                        >
+                            <View style={styles.centeredView}>
+                                <View style={styles.modalView}>
+                                    <Text style={styles.modalText}>Một mã số đã được gửi đến Email của bạn</Text>
+                                    <TextInput
+                                        placeholder='Nhập mã số'
+                                        keyboardType='numeric'
+                                        onChangeText={(text) => setVerifyCode(text)}
+                                        maxLength={6}  //setting limit of input
+                                    />
+                                    <Pressable
+                                        style={[styles.button, styles.buttonClose]}
+                                        onPress={verify}
+                                    >
+                                        <Text style={styles.textStyle}>Xác nhận</Text>
+                                    </Pressable>
+                                </View>
+                            </View>
+                        </Modal>
+                        {/* <Pressable
+                            style={[styles.button, styles.buttonOpen]}
+                            onPress={() => setModalVisible(true)}
+                        >
+                            <Text style={styles.textStyle}>Show Modal</Text>
+                        </Pressable> */}
+                    </View>
                 </View>
             </View>
         </ScrollView>
@@ -301,6 +392,46 @@ const styles = StyleSheet.create({
     textSign: {
         fontSize: 18,
         fontWeight: 'bold'
+    },
+    centeredView: {
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+    buttonOpen: {
+        backgroundColor: "#F194FF",
+    },
+    buttonClose: {
+        backgroundColor: "#2196F3",
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
     }
 });
 
