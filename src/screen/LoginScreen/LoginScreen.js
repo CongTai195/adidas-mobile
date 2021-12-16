@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text,Pressable, Button, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient';
@@ -51,34 +51,12 @@ function LoginScreen() {
   }
   const updateSecureEntry = () => {
     setData({
+      ...data,
       secureTextEntry: !data.secureTextEntry
     });
   }
 
   const login = async () => {
-    // try {
-    //   const obj = { email: data.userName, password: data.password };
-    //   const response = await fetch('http://10.0.2.2:8000/api/login', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(obj)
-    //   });
-    //   const result = await response.json();
-    //   if (result.status == "OK") {
-    //     Alert.alert("Đăng nhập thành công");
-    //     context.addUser(result.results.info);
-    //     await AsyncStorage.setItem('@storage_Key', result.results.token);
-    //   }
-    //   if (result.status == "NG") {
-    //     Alert.alert("Đăng nhập không thành công");
-    //     console.log(result);
-    //   }
-    // }
-    // catch (err) {
-    //   console.log(err);
-    // }
     setData({
       userName: '',
       password: '',
@@ -96,6 +74,7 @@ function LoginScreen() {
       })
       .catch(err => {
         Alert.alert("Đăng nhập không thành công");
+        console.log(err);
       });
   }
   if (user.length == 0) {
@@ -103,7 +82,9 @@ function LoginScreen() {
       <View style={styles.container}>
         <View style={styles.footer}>
           <Text style={styles.text_header}> ĐĂNG NHẬP </Text>
-          <Text style={styles.text_footer}>Bạn quên mật khẩu?</Text>
+          <Pressable onPress={() => navigation.navigate("ResetPassword")}>
+            <Text style={styles.text_footer}>Bạn quên mật khẩu?</Text>
+          </Pressable>
           <View style={[styles.action, { marginTop: 35 }]}>
             <FontAwesome
               name="user-o"

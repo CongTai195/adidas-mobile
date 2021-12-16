@@ -3,22 +3,27 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screen/LoginScreen/LoginScreen';
 import RegisterScreen from '../screen/RegisterScreen';
-
+import ResetPassword from '../screen/ResetPassword'
 const Stack = createStackNavigator();
 
 const LoginStack = () => {
     return (
         <Stack.Navigator>
-            <Stack.Screen 
-                component={LoginScreen} 
+            <Stack.Screen
+                component={LoginScreen}
                 name="LoginScreen"
-                options={{headerShown: false}} 
-                />
-            <Stack.Screen 
-                component={RegisterScreen} 
-                name="Register" 
-                options={{headerShown: false}}
-                />
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                component={RegisterScreen}
+                name="Register"
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                component={ResetPassword}
+                name="ResetPassword"
+                options={{ headerShown: false }}
+            />
         </Stack.Navigator>
     );
 };

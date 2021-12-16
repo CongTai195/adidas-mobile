@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Picker } from "@react-native-picker/picker";
 import { ENV } from '../const/env';
 import axios from 'axios';
+import Adress from '../components/Address';
 
 
 function RegisterScreen({ navigation }) {
@@ -24,7 +25,10 @@ function RegisterScreen({ navigation }) {
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [verifyCode, setVerifyCode] = React.useState("");
-    const [ids, setids] =  React.useState([]);
+    const [ids, setids] = React.useState([]);
+    const [province, setProvince] = React.useState("");
+    const [district, setDistrict] = React.useState("");
+    const [ward, setWard] = React.useState("");
 
     const register = async () => {
         try {
@@ -33,7 +37,7 @@ function RegisterScreen({ navigation }) {
                 email: data.userEmail,
                 password: data.userPassword,
                 gender: selectedOption,
-                address: data.userAddress,
+                address: data.userAddress + ", " + ward + ", " + district + ", " + province + ".",
                 phone: data.userPhone
             };
             const response = await fetch(`${ENV.BASE_URL}register`, {
@@ -66,51 +70,21 @@ function RegisterScreen({ navigation }) {
     }
 
     const verify = async () => {
-        // try {
-        //     const idss = [ids];
-        //     console.log("ids", idss)
-        //     var url = new URL(`${ENV.BASE_URL}verify`),
-        //         params = {
-        //             ids: idss,
-        //             code: verifyCode
-        //         }
-        //     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-        //     const response = await fetch(url, {
-        //         method: 'GET',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //     });
-        //     const result = await response.json();
-        //     console.log(result);
-        //     if (result.status == "OK") {
-        //         Alert.alert("Đăng ký thành công");
-        //         navigation.goBack();
-        //     } else {
-        //         Alert.alert("Đăng ký không thành công");
-        //     }
-        // }
-        // catch (err) {
-        //     console.log(err);
-        // }
-        //const idss = [ids];
-        axios.get(`${ENV.BASE_URL}verify`, {
-            params: {
-              ids: [ids],
-              code: verifyCode
-            }
-          }).then(res => {
-            if (res.data.status == "OK") {
-              Alert.alert("Đăng ký thành công");
-              navigation.goBack();
-            }
-            else {
+        const data = { ids: [ids], code: verifyCode }
+        axios.post(`${ENV.BASE_URL}verify`, data)
+            .then(res => {
+                if (res.data.status == "OK") {
+                    Alert.alert("Đăng ký thành công");
+                    navigation.goBack();
+                }
+                else {
+                    Alert.alert("Đăng ký không thành công");
+                }
+            })
+            .catch(err => {
                 Alert.alert("Đăng ký không thành công");
-            }
-          })
-          .catch(err => {
-            Alert.alert("Đăng nhập không thành công");
-          });
+                console.log(err);
+            });
     }
 
     return (
@@ -138,6 +112,16 @@ function RegisterScreen({ navigation }) {
                         />
                     </View>
 
+                    <Picker
+                        useNativeAndroidPickerStyle={false}
+                        selectedValue={selectedOption}
+                        onValueChange={(itemValue) =>
+                            setSelectedOption(itemValue)}>
+                        <Picker.Item label='Giới tính' value='-1' />
+                        <Picker.Item label='Nam' value='1' />
+                        <Picker.Item label='Nữ' value='0' />
+                    </Picker>
+
                     <View style={[styles.action, { marginTop: 20 }]}>
                         <FontAwesome
                             name="phone"
@@ -156,7 +140,6 @@ function RegisterScreen({ navigation }) {
                             }}
                         />
                     </View>
-
                     <View style={[styles.action, { marginTop: 20 }]}>
                         <FontAwesome
                             name="map-marker"
@@ -176,15 +159,7 @@ function RegisterScreen({ navigation }) {
                         />
                     </View>
 
-                    <Picker
-                        useNativeAndroidPickerStyle={false}
-                        selectedValue={selectedOption}
-                        onValueChange={(itemValue) =>
-                            setSelectedOption(itemValue)}>
-                        <Picker.Item label='Giới tính' value='-1' />
-                        <Picker.Item label='Nam' value='1' />
-                        <Picker.Item label='Nữ' value='0' />
-                    </Picker>
+                    <Adress callBacksetProvince={setProvince} callBacksetDistricts={setDistrict} callBacksetWards={setWard} />
 
                     <View style={[styles.action, { marginTop: 35 }]}>
                         <FontAwesome

@@ -87,13 +87,13 @@ const DetailTranScreen = () => {
 
                     <View>
                         {
-                            item.status == 0 ? (
+                            item.status == 3 ? (
                                 <View style={styles.button}>
                                     <LinearGradient
                                         colors={['#FFF', '#FFF']}
                                         style={styles.signIn}
                                     >
-                                        <Text style={[styles.textSign, { color: "#000" }]} onPress={() => { navigation.navigate("Comment", {id: product.product.id}) }}>
+                                        <Text style={[styles.textSign, { color: "#000" }]} onPress={() => { navigation.navigate("Comment", {order_id: product.id, product_id: product.product.id}) }}>
                                             Đánh giá sản phẩm
                                         </Text>
                                     </LinearGradient>
