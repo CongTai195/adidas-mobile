@@ -11,7 +11,8 @@ import { Rating, AirbnbRating } from 'react-native-ratings';
 const CommentScreen = () => {
 
     const route = useRoute();
-    const id = route.params.id;
+    const product_id = route.params.product_id;
+    const order_id = route.params.order_id;
     const navigation = useNavigation();
     const [rating, setRating] = React.useState(0);
     const [comment, setComment] = React.useState("");
@@ -29,7 +30,8 @@ const CommentScreen = () => {
                     'Authorization': 'Bearer ' + await AsyncStorage.getItem('@storage_Key')
                 },
                 body: JSON.stringify({
-                    product_id: id,
+                    order_id: order_id,
+                    product_id: product_id,
                     star: rating,
                     content: comment.toString()
                 })
