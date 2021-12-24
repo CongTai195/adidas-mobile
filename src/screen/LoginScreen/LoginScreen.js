@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text,Pressable, Button, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Pressable, ToastAndroid, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient';
@@ -8,7 +8,7 @@ import ProfileScreen from '../ProfileScreen/ProfileScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import {ENV} from '../../const/env';
+import { ENV } from '../../const/env';
 
 
 
@@ -16,39 +16,19 @@ function LoginScreen() {
 
   const navigation = useNavigation();
 
+  const [userName, setUserName] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
   const context = useContext(DataContext);
   const user = context.user;
 
   const [data, setData] = useState({
-    userName: '',
-    password: '',
     check_textInputChange: false,
     secureTextEntry: true
   });
 
   //const {login} = React.useContext(AuthContext);
 
-  const textInputChange = (val) => {
-    if (val.length != 0) {
-      setData({
-        ...data,
-        userName: val,
-        check_textInputChange: true
-      });
-    } else {
-      setData({
-        ...data,
-        userName: val,
-        check_textInputChange: false
-      });
-    }
-  }
-  const handlePasswordChange = (val) => {
-    setData({
-      ...data,
-      password: val,
-    });
-  }
   const updateSecureEntry = () => {
     setData({
       ...data,
@@ -57,25 +37,29 @@ function LoginScreen() {
   }
 
   const login = async () => {
-    setData({
-      userName: '',
-      password: '',
-      check_textInputChange: false,
-      secureTextEntry: true
-    });
-    const loginData = { email: data.userName, password: data.password }
-    axios.post(`${ENV.BASE_URL}login`, loginData)
-      .then(res => {
-        if (res.data.status == "OK") {
-          context.addUser(res.data.results.info);
-          Alert.alert("Đăng nhập thành công");
-          AsyncStorage.setItem('@storage_Key', res.data.results.token);
-        }
-      })
-      .catch(err => {
-        Alert.alert("Đăng nhập không thành công");
-        console.log(err);
-      });
+    if (userName === "") {
+      ToastAndroid.showWithGravity("Bạn chưa nhập Email", ToastAndroid.SHORT, ToastAndroid.CENTER);
+    }
+    else if (password === "") {
+      ToastAndroid.showWithGravity("Bạn chưa nhập mật khẩu", ToastAndroid.SHORT, ToastAndroid.CENTER);
+    }
+    else if (userName !== "" && password !== "") {
+      const loginData = { email: userName, password: password }
+      axios.post(`${ENV.BASE_URL}login`, loginData)
+        .then(res => {
+          if (res.data.status == "OK") {
+            context.addUser(res.data.results.info);
+            ToastAndroid.showWithGravity("Đăng nhập thành công", ToastAndroid.SHORT, ToastAndroid.CENTER);
+            AsyncStorage.setItem('@storage_Key', res.data.results.token);
+          }
+        })
+        .catch(err => {
+          Alert.alert("Đăng nhập không thành công");
+          console.log(err);
+        });
+      setUserName("");
+      setPassword("");
+    }
   }
   if (user.length == 0) {
     return (
@@ -95,7 +79,8 @@ function LoginScreen() {
               placeholder="Email *"
               style={styles.textInput}
               autoCapitalize="none"
-              onChangeText={(val) => textInputChange(val)}
+              value={userName}
+              onChangeText={(val) => setUserName(val)}
             />
             {data.check_textInputChange ?
               <Feather
@@ -116,7 +101,8 @@ function LoginScreen() {
               style={styles.textInput}
               autoCapitalize="none"
               secureTextEntry={data.secureTextEntry ? true : false}
-              onChangeText={(val) => handlePasswordChange(val)}
+              value={password}
+              onChangeText={(val) => setPassword(val)}
             />
             <TouchableOpacity onPress={updateSecureEntry}>
               {data.secureTextEntry ?

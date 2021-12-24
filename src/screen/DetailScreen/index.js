@@ -101,7 +101,7 @@ const DetailScreen = () => {
                 }} />
                 <Text style={styles.textHeaderInfo}>Đánh giá</Text>
                 <View style={styles.ratingsContainer}>
-                <Text style={styles.avgRating}>{avgRating} trên 5</Text>
+                <Text style={styles.avgRating}>{Math.round(avgRating * 100) / 100} trên 5</Text>
                                 {[0, 0, 0, 0, 0].map((el, i) => (
                                     <FontAwesome
                                         key={`${id}-${i}`}

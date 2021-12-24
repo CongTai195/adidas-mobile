@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginScreen from '../screen/LoginScreen/LoginScreen';
 import axios from 'axios';
 import {ENV} from '../const/env';
+import { useFocusEffect } from '@react-navigation/native';
 
 function TranScreen() {
   const context = React.useContext(DataContext);
@@ -18,11 +19,11 @@ function TranScreen() {
 
   const cart = context.cart;
 
-  React.useEffect(() => {
-    // if (user.length !== 0) {
-      getTran();
-    //}
-  }, [user.length, cart.length]);
+  useFocusEffect(
+    React.useCallback(() => {
+      getTran()
+    }, [user.length, cart.length])
+  );
 
   const getTran = async () => {
     // try {
@@ -52,7 +53,7 @@ function TranScreen() {
     authAxios.get(`${ENV.BASE_URL}transaction`)
       .then(res => {
         if (res.data.status == "OK") {
-          console.log(res.data.results);
+          //console.log(res.data.results);
           setTranItem(res.data.results);
         }
       })
