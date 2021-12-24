@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Image, View, Text, StyleSheet, TextInput, RadioButton, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { Image,  View, Text, StyleSheet, TextInput, RadioButton, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import LinearGradient from 'react-native-linear-gradient';
 import { DataContext } from '../../service/Context';
+import {WebView} from 'react-native-webview'
 import Button from '../../components/Button';
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from '@react-navigation/native';
@@ -41,15 +42,29 @@ function CheckoutScreen() {
                 })
             });
             const result = await response.json();
-            if (result.status == "OK") {
-                context.clearCart();
-                Alert.alert("Mua hàng thành công");
-                navigation.navigate("Tran");
+            console.log(result);
+            if (paymentSelectedOption == "Thanh toán trực tuyến") {
+                if (result.status == "OK") {
+                    context.clearCart();
+                    //console.log(result.results.vnp);
+                    navigation.navigate("Payment", {url: result.results.vnp});
+                }
+                if (result.status == "NG") {
+                    Alert.alert("Mua hàng không thành công")
+                    console.log(result);
+                }
             }
-            if (result.status == "NG") {
-                Alert.alert("Mua hàng không thành công")
-                console.log(result);
-
+            else {
+                if (result.status == "OK") {
+                    context.clearCart();
+                    Alert.alert("Mua hàng thành công");
+                    navigation.navigate("Tran");
+                }
+                if (result.status == "NG") {
+                    Alert.alert("Mua hàng không thành công")
+                    console.log(result);
+    
+                }
             }
         }
         catch (err) {
@@ -139,9 +154,8 @@ function CheckoutScreen() {
                             selectedValue={paymentSelectedOption}
                             onValueChange={(itemValue) =>
                                 setPaymentSelectedOption(itemValue)}>
-                            <Picker.Item label="Thẻ ATM nội địa" value="Thẻ ATM nội địa" />
                             <Picker.Item label="Thanh toán khi nhận hàng" value="Thanh toán khi nhận hàng" />
-                            <Picker.Item label="Thanh toán ví Momo" value="Thanh toán ví Momo" />
+                            <Picker.Item label="Thanh toán trực tuyến" value="Thanh toán trực tuyến" />
                         </Picker>
                     </View>
                     <View style={styles.footer}>
